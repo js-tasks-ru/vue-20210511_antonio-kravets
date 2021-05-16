@@ -44,4 +44,41 @@ const agendaItemIcons = {
   other: 'cal-sm',
 };
 
-// Требуется создать Vue приложение
+new Vue({
+  el: '#app',
+  data() {
+    return {
+      id: null,
+      meetup: null,
+      checked: null,
+      image: null,
+      agendaType: null,
+      agendaTitle: null,
+    };
+  },
+
+  computed: {
+    icon() {
+      return `/assets/icons/icon-${agendaItemIcons[this.agendaType]}.svg`;
+    },
+
+    title() {
+      return agendaItemDefaultTitles[this.agendaType];
+    },
+  },
+
+  mounted() {
+    fetch(`${API_URL}/meetups/${MEETUP_ID}`)
+      .then((response) => response.json())
+      .then((result) => {
+        this.meetup = result;
+        this.meetup.coverStyle = { '--bg-url': `url(${getImageUrlByImageId(this.meetup.imageId)})` };
+      });
+  },
+
+  methods: {
+    localeDate(date) {
+      return new Date(date).toLocaleString(navigator.language, { year: 'numeric', month: 'long', day: 'numeric' });
+    },
+  },
+});

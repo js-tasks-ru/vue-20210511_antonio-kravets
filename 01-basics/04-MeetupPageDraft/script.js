@@ -44,4 +44,48 @@ const agendaItemIcons = {
   other: 'cal-sm',
 };
 
-// Требуется создать Vue приложение
+const fetchMeetup = () => fetch(`${API_URL}/meetups/${MEETUP_ID}`)
+  .then((response) => response.json());
+
+
+new Vue({
+  el: '#app',
+  data() {
+    return {
+      rawMeetup: null,
+    };
+  },
+
+  computed: {
+    image() {
+      return this.rawMeetup.imageId ? { '--bg-url': `url(${getImageUrlByImageId(this.rawMeetup.imageId)})` } : '';
+    },
+
+    meetup() {
+      if (!this.rawMeetup) {
+        return null;
+      }
+
+      let meetup = Object.assign({}, this.rawMeetup);
+      meetup['agenda'] = meetup.agenda.map((ag) => ({
+        ...ag,
+        icon: `/assets/icons/icon-${agendaItemIcons[ag.type]}.svg`,
+        title: ag.title ? ag.title : agendaItemDefaultTitles[ag.type],
+      }));
+
+      return meetup;
+    },
+  },
+
+  mounted() {
+    fetchMeetup().then((data) => {
+      this.rawMeetup = data;
+    });
+  },
+
+  methods: {
+    localeDate(date) {
+      return new Date(date).toLocaleString(navigator.language, {year: 'numeric', month: 'long', day: 'numeric'});
+    },
+  },
+});

@@ -6,8 +6,7 @@ new Vue({
   data() {
     return {
       id: null,
-      meetup: {},
-      checked: null,
+      meetup: null,
     };
   },
 

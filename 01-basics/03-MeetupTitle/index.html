@@ -10,12 +10,12 @@
 <div id="app">
   <div>
     <div v-for="i in 5" style="display: inline">
-      <input type="radio" :id="i" v-model="checked" v-on:change="id=i" :value="i">
+      <input type="radio" :id="i" v-model="id" @change="id=i" :value="i">
       <label :for="i">{{ i }}</label>
     </div>
   </div>
   <hr>
-  <div>
+  <div v-if="meetup">
     {{ meetup.title }}
   </div>
 </div>

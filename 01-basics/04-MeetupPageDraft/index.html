@@ -10,8 +10,8 @@
 </head>
 <body>
 <div id="app">
-  <div>
-    <div class="meetup-cover" :style="meetup.coverStyle">
+  <div v-if="meetup">
+    <div class="meetup-cover" :style="image">
       <h1 class="meetup-cover__title">{{ meetup.title }}</h1>
     </div>
 
@@ -27,13 +27,13 @@
           <div class="meetup-agenda">
             <div v-for="agenda in meetup.agenda" class="meetup-agenda__item">
               <div class="meetup-agenda__item-col">
-                <img class="icon" alt="icon" v-if="agendaType=agenda.type" :src="icon"/>
+                <img class="icon" alt="icon" v-if="agenda.type" :src="agenda.icon"/>
 
               </div>
               <div class="meetup-agenda__item-col">{{ agenda.startsAt }} - {{ agenda.endsAt }}</div>
               <div class="meetup-agenda__item-col">
-                <h5 class="meetup-agenda__title" v-if="agenda.title">{{ agenda.title }}</h5>
-                <h5 class="meetup-agenda__title" v-else>{{ title }}</h5>
+                <h5 class="meetup-agenda__title">{{ agenda.title ? agenda.title : title }}</h5>
+
                 <p v-if="agenda.type==='talk'"><span>{{ agenda.speaker }}</span><span class="meetup-agenda__dot"></span><span
                   class="meetup-agenda__lang">{{ agenda.language }}</span></p>
                 <p>{{ agenda.description }}</p>

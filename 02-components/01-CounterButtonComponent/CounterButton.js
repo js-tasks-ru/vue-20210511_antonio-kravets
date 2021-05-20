@@ -3,7 +3,6 @@ export default {
 
   props: {
     count: {
-      required: true,
       type: Number,
       default: 0,
     },
@@ -11,7 +10,7 @@ export default {
 
   model: {
     prop: 'count',
-    event: 'increment'
+    event: 'increment',
   },
 
   methods: {
@@ -20,5 +19,5 @@ export default {
     },
   },
 
-  template: '<button type="button" @click="increment(count)">Count me</button>',
+  template: '<button type="button" @click="increment(count)">{{ count }}</button>',
 };

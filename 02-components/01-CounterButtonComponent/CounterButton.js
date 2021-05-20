@@ -1,12 +1,24 @@
 export default {
   name: 'CounterButton',
 
-  // Компонент должен иметь входной параметр
+  props: {
+    count: {
+      required: true,
+      type: Number,
+      default: 0,
+    },
+  },
 
-  // Компонент должен иметь модель
+  model: {
+    prop: 'count',
+    event: 'increment'
+  },
 
-  // Шаблон лучше держать максимально простым, а логику выносить в методы
+  methods: {
+    increment(value) {
+      this.$emit('increment', value + 1);
+    },
+  },
 
-  // Шаблон потребуется отредактировать
-  template: '<button type="button"></button>',
+  template: '<button type="button" @click="increment(count)">Count me</button>',
 };

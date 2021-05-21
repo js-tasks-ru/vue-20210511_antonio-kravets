@@ -1,9 +1,25 @@
 const MeetupCover = {
   name: 'MeetupCover',
 
+  props: {
+    title: {
+      type: String,
+    },
+    link: {
+      type: String,
+    },
+  },
+
+  computed: {
+    image() {
+      return this.link ? { '--bg-url': `url(${this.link})` } : '';
+    },
+  },
+
   template: `
-    <div class="meetup-cover" style="--bg-url: url('https://course-vue.javascript.ru/api/images/2')">
-        <h1 class="meetup-cover__title">Title</h1>
+    <div class="meetup-cover"
+         :style="image">
+    <h1 class="meetup-cover__title">{{ title }}</h1>
     </div>`,
 };
 

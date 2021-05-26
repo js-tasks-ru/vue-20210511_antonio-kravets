@@ -24,7 +24,7 @@ const MeetupView = {
 
   computed: {
     imageLink() {
-      return this.meetup.imageId ? getImageUrlByImageId(this.meetup.imageId) : '';
+      return getImageUrlByImageId(this.meetup.imageId);
     },
   },
   template: `

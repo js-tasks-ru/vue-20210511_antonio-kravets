@@ -1,34 +1,61 @@
-/*
-  Полезные функции по работе с датой можно описать вне Vue компонента
- */
+import { getCalendarDateGrid } from './utils.js';
 
 const MeetupsCalendar = {
   name: 'MeetupsCalendar',
 
-  template: `<div class="rangepicker">
+  props: {
+    meetups: {
+      type: Array,
+      required: true,
+    },
+  },
+
+  data() {
+    return {
+      month: new Date().getMonth(),
+    };
+  },
+
+  computed: {
+    calendarMonth() {
+      let dt = new Date();
+      let year = dt.getFullYear();
+      return new Date(year, this.month).toLocaleString(navigator.language, {
+        year: 'numeric',
+        month: 'long',
+      });
+    },
+    cells() {
+      return getCalendarDateGrid(this.month).map((cell) => ({
+        ...cell,
+        events: this.meetups.filter(
+          (meetup) => new Date(meetup.date).toLocaleDateString() === new Date(cell.date).toLocaleDateString(),
+        ),
+      }));
+    },
+  },
+  template: `
+    <div class="rangepicker">
     <div class="rangepicker__calendar">
       <div class="rangepicker__month-indicator">
         <div class="rangepicker__selector-controls">
-          <button class="rangepicker__selector-control-left"></button>
-          <div>Июнь 2020</div>
-          <button class="rangepicker__selector-control-right"></button>
+          <button class="rangepicker__selector-control-left" @click="month--"></button>
+          <div>{{ calendarMonth }}</div>
+          <button class="rangepicker__selector-control-right" @click="month++"></button>
         </div>
       </div>
+
       <div class="rangepicker__date-grid">
-        <div class="rangepicker__cell rangepicker__cell_inactive">28</div>
-        <div class="rangepicker__cell rangepicker__cell_inactive">29</div>
-        <div class="rangepicker__cell rangepicker__cell_inactive">30</div>
-        <div class="rangepicker__cell rangepicker__cell_inactive">31</div>
-        <div class="rangepicker__cell">
-          1
-          <a class="rangepicker__event">Митап</a>
-          <a class="rangepicker__event">Митап</a>
+
+        <div v-for="cell in cells"
+             :class="cell.month===month ? 'rangepicker__cell':'rangepicker__cell rangepicker__cell_inactive'">
+          {{ cell.day }}
+          <a class="rangepicker__event" v-if="cell.events" v-for="event in cell.events">{{ event.title }}</a>
         </div>
-        <div class="rangepicker__cell">2</div>
-        <div class="rangepicker__cell">3</div>
+
       </div>
     </div>
-  </div>`,
+    </div>`,
 };
 
 export default MeetupsCalendar;

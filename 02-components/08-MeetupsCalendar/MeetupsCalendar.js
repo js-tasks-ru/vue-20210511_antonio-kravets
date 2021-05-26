@@ -1,4 +1,4 @@
-import {getCalendarDateGrid} from "./utils.js";
+import { getCalendarDateGrid } from './utils.js';
 
 const MeetupsCalendar = {
   name: 'MeetupsCalendar',
@@ -25,9 +25,13 @@ const MeetupsCalendar = {
         month: 'long',
       });
     },
-
     cells() {
-      return getCalendarDateGrid(this.month);
+      return getCalendarDateGrid(this.month).map((cell) => ({
+        ...cell,
+        events: this.meetups.filter(
+          (meetup) => new Date(meetup.date).toLocaleDateString() === new Date(cell.date).toLocaleDateString(),
+        ),
+      }));
     },
   },
   template: `
@@ -46,8 +50,7 @@ const MeetupsCalendar = {
         <div v-for="cell in cells"
              :class="cell.month===month ? 'rangepicker__cell':'rangepicker__cell rangepicker__cell_inactive'">
           {{ cell.day }}
-          <a class="rangepicker__event" v-for="meetup in meetups"
-             v-if="new Date(meetup.date).toLocaleDateString()  === new Date(cell.date).toLocaleDateString()">{{ meetup.title }}</a>
+          <a class="rangepicker__event" v-if="cell.events" v-for="event in cell.events">{{ event.title }}</a>
         </div>
 
       </div>

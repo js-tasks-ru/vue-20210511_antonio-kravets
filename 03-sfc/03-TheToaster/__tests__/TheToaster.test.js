@@ -58,14 +58,17 @@ describe('sfc/TheToaster', () => {
       const wrapper = mount(TheToaster);
 
       wrapper.vm.success('Time_0');
+      await wrapper.vm.$nextTick();
       // Current = 0
 
       jest.advanceTimersByTime(2500);
       wrapper.vm.success('Time_2500');
+      await wrapper.vm.$nextTick();
       // Current = 2500
 
       jest.advanceTimersByTime(1000);
       wrapper.vm.success('Time_3500');
+      await wrapper.vm.$nextTick();
       // Current = 3500
 
       jest.advanceTimersByTime(1600);

@@ -1,17 +1,21 @@
 <template>
-  <div class="dropdown" :class="show ? 'show':''">
-    <button type="button" class="button dropdown__toggle dropdown__toggle_icon" @click="show = !show">
-      <template v-if="value"> {{ title }} - {{ text }}</template>
+  <div class="dropdown" :class="{ show: show }">
+    <button type="button" class="button dropdown__toggle" :class="{'dropdown__toggle_icon':icon}" @click="show = !show">
+      <template v-if="value">
+        <app-icon v-if="icon" :icon="icon" />
+        {{ title }} - {{ text }}
+      </template>
       <template v-else>{{ title }}</template>
     </button>
 
-    <div class="dropdown__menu" :class="show?'show':''">
+    <div class="dropdown__menu" :class="{ show: show}" >
       <button
         v-for="option in options"
         :key="option.value"
-        class="dropdown__item dropdown__item_icon"
+        class="dropdown__item"
+        :class="{ dropdown__item_icon: haveIcons}"
         type="button"
-        @click="$emit('change', option.value), show = !show"
+        @click="$emit('change', option.value), (show = !show)"
       >
         <app-icon v-if="option.icon" :icon="option.icon"/>
         {{ option.text }}
@@ -27,11 +31,10 @@ import AppIcon from './AppIcon';
 export default {
   name: 'DropdownButton',
 
-  components: {AppIcon},
-  data() {
-    return {
-      show: false,
-    };
+  components: { AppIcon },
+  model: {
+    prop: 'value',
+    event: 'change',
   },
 
   props: {
@@ -39,29 +42,44 @@ export default {
       type: String,
       required: true,
     },
+
     options: {
       type: Array,
       required: true,
     },
+
     value: {
       type: String,
     },
   },
-  model: {
-    prop: 'value',
-    event: 'change',
+
+  data() {
+    return {
+      show: false,
+    };
   },
 
   computed: {
     text() {
       let text = '';
-      this.options.forEach(option => {
-        if (option.value === this.value)
-          text = option.text;
-      });
+      this.options.some((option) => option.value === this.value)
+        ? (text = this.options.find((opt) => opt.value === this.value).text)
+        : '';
       return text;
-    }
-  }
+    },
+
+    icon() {
+      let icon = '';
+      this.options.some((option) => option.value === this.value)
+        ? (icon = this.options.find((opt) => opt.value === this.value).icon)
+        : '';
+      return icon;
+    },
+
+    haveIcons(){
+      return this.options.some((option) => option.icon);
+    },
+  },
 };
 </script>
 
@@ -141,7 +159,7 @@ export default {
   top: 15px;
   right: 16px;
   transform: none;
-  background: url('../assets/icons/icon-chevron-down.svg') no-repeat;
+  background: url('~@/assets/icons/icon-chevron-down.svg') no-repeat;
   background-size: cover;
   display: block;
   width: 24px;

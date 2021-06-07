@@ -1,21 +1,22 @@
 <template>
   <div class="dropdown" :class="{ show: show }">
-    <button type="button" class="button dropdown__toggle" :class="{'dropdown__toggle_icon':icon}" @click="show = !show">
+    <button type="button" class="button dropdown__toggle" :class="{'dropdown__toggle_icon':haveIcons}"
+            @click="show = !show">
       <template v-if="value">
-        <app-icon v-if="icon" :icon="icon" />
+        <app-icon v-if="icon" :icon="icon"/>
         {{ title }} - {{ text }}
       </template>
       <template v-else>{{ title }}</template>
     </button>
 
-    <div class="dropdown__menu" :class="{ show: show}" >
+    <div class="dropdown__menu" :class="{ show: show}">
       <button
         v-for="option in options"
         :key="option.value"
         class="dropdown__item"
         :class="{ dropdown__item_icon: haveIcons}"
         type="button"
-        @click="$emit('change', option.value), (show = !show)"
+        @click="handleClick(option.value)"
       >
         <app-icon v-if="option.icon" :icon="option.icon"/>
         {{ option.text }}
@@ -31,7 +32,7 @@ import AppIcon from './AppIcon';
 export default {
   name: 'DropdownButton',
 
-  components: { AppIcon },
+  components: {AppIcon},
   model: {
     prop: 'value',
     event: 'change',
@@ -61,25 +62,27 @@ export default {
 
   computed: {
     text() {
-      let text = '';
-      this.options.some((option) => option.value === this.value)
-        ? (text = this.options.find((opt) => opt.value === this.value).text)
-        : '';
-      return text;
+      return this.getPropertyByValue('text');
     },
-
     icon() {
-      let icon = '';
-      this.options.some((option) => option.value === this.value)
-        ? (icon = this.options.find((opt) => opt.value === this.value).icon)
-        : '';
-      return icon;
+      return this.getPropertyByValue('icon');
     },
-
-    haveIcons(){
+    haveIcons() {
       return this.options.some((option) => option.icon);
     },
   },
+
+  methods: {
+    getPropertyByValue(property) {
+      return this.options.find((opt) => opt.value === this.value)[property];
+    },
+
+    handleClick(val){
+      this.$emit('change', val);
+      this.show = !this.show;
+    },
+  },
+
 };
 </script>
 

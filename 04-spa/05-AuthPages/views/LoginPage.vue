@@ -1,15 +1,15 @@
 <template>
-  <form class="form">
+  <form class="form" @submit.prevent="handleSubmit">
     <div class="form-group">
       <label class="form-label">Email</label>
       <div class="input-group">
-        <input type="email" placeholder="demo@email" class="form-control" />
+        <input v-model="email" type="email" placeholder="demo@email" class="form-control"/>
       </div>
     </div>
     <div class="form-group">
       <label class="form-label">Пароль</label>
       <div class="input-group">
-        <input type="password" placeholder="password" class="form-control" />
+        <input v-model="password" type="password" placeholder="password" class="form-control"/>
       </div>
     </div>
     <div class="form__buttons">
@@ -17,16 +17,54 @@
     </div>
     <div class="form__append">
       Нет аккаунта?
-      <a class="link">Зарегистрируйтесь</a>
+      <router-link class="link" to="/register">Зарегистрируйтесь</router-link>
     </div>
   </form>
 </template>
 
 <script>
-// import { login } from '../data';
+import {login} from '../data';
+
 
 export default {
   name: 'LoginPage',
+  data() {
+    return {
+      email: null,
+      password: null,
+      path: '/',
+    }
+  },
+
+  methods: {
+    handleSubmit() {
+      if (!this.email) {
+        alert('Требуется ввести Email');
+        return;
+      }
+
+      if (!this.password) {
+        alert('Требуется ввести пароль');
+        return;
+      }
+
+
+      login(this.email, this.password)
+        .then(
+          (res) => {
+            if (!res.error) {
+              alert(res.fullname);
+              if (this.$route.query.from) {
+                this.path = this.$route.query.from;
+              }
+               this.$router.push(this.path);
+            } else {
+              alert(res.message);
+            }
+          })
+
+    }
+  },
 };
 </script>
 

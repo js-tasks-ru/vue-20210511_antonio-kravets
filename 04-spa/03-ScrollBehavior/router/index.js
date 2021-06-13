@@ -54,6 +54,11 @@ export const router = new VueRouter({
     if (to.matched.some((record) => record.meta.saveScrollPosition)) {
       if (!from.matched.some((record) => record.meta.saveScrollPosition)) {
         return position;
+      } else {
+        if (to.hash) {
+          position.selector = to.hash;
+          return position;
+        }
       }
       return false;
     }

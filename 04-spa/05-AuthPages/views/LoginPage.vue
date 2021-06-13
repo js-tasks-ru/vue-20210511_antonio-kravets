@@ -25,15 +25,13 @@
 <script>
 import {login} from '../data';
 
-
 export default {
   name: 'LoginPage',
   data() {
     return {
       email: null,
       password: null,
-      path: '/',
-    }
+    };
   },
 
   methods: {
@@ -53,11 +51,13 @@ export default {
         .then(
           (res) => {
             if (!res.error) {
+              let path = '/';
               alert(res.fullname);
+
               if (this.$route.query.from) {
-                this.path = this.$route.query.from;
+                path = this.$route.query.from;
               }
-               this.$router.push(this.path);
+              this.$router.push(path);
             } else {
               alert(res.message);
             }

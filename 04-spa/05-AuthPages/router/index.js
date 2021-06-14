@@ -5,6 +5,14 @@ export const routes = [
     path: '/',
     component: () => import('../views/IndexPage'),
   },
+  {
+    path: '/register',
+    component: () => import('../views/RegisterPage'),
+  },
+  {
+    path: '/login',
+    component: () => import('../views/LoginPage'),
+  },
 ];
 
 export const router = new VueRouter({

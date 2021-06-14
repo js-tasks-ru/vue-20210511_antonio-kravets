@@ -1,8 +1,23 @@
-<template></template>
+<template>
+  <header class="header">
+    <div>
+      <h1>
+        <router-link :to="{ name: 'index' }"><img src="@/assets/logo.svg" alt="Meetups"/></router-link>
+      </h1>
+    </div>
+    <nav>
+
+      <router-link :to="{ name: 'meetups' }">Митапы</router-link>
+      <router-link :to="{ name: 'form' }">Создать митап</router-link>
+      <router-link :to="{ name: 'login' }">Вход</router-link>
+    </nav>
+  </header>
+</template>
 
 <script>
 export default {
   name: 'TheHeader',
+
 };
 </script>
 

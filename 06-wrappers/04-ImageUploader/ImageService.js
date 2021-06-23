@@ -4,15 +4,11 @@ export const API_URL = 'https://course-vue.javascript.ru/api';
 export const ImageService = {
   /**
    * Загружает файл на сервер и получает
-   * https://course-vue.javascript.ru/api/#/Images/ImagesController_uploadImage
-   * @param {File} file - файл, который требуется загрузить
-   * @return {Promise<Object>} - объект с ID изображения
+   * @param file
+   * @return {Promise<Object>}
    */
   // eslint-disable-next-line no-unused-vars
   uploadImage(file) {
-    if (!(file instanceof File)) {
-      throw new TypeError(`file should be instance of File`);
-    }
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({ id: 1 });

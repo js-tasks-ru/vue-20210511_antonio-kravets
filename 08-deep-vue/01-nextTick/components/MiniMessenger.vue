@@ -1,6 +1,6 @@
 <template>
   <main>
-    <messages-list class="messages" :messages="messages" />
+    <messages-list ref="messagesList" class="messages" :messages="messages" />
     <form style="display: flex" @submit.prevent="send">
       <input v-model="newMessage" type="text" placeholder="New message" />
       <button>Send</button>
@@ -13,8 +13,7 @@ import MessagesList from './MessegesList';
 
 let id = 0;
 
-// Раскомментируйте эту строку
-// export const TASK_SOLVED = true;
+export const TASK_SOLVED = true;
 
 export default {
   name: 'MiniMessenger',
@@ -40,6 +39,11 @@ export default {
         text: this.newMessage,
       });
       this.newMessage = '';
+
+      this.$nextTick().then(() => {
+        const element = this.$refs['messagesList'].$el;
+        element.scrollTop = element.scrollHeight - element.clientHeight;
+      });
     },
   },
 };

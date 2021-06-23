@@ -1,12 +1,10 @@
 <template>
   <calendar-view>
-    <!-- Используя слот требуется вывести список праздников соответствующего дня в каждой ячейке -->
-    <!-- Каждый праздник - div.holiday -->
-    <!-- Вместо 0 должен быть месяц, а вместо 1 - день, некоторым образом полученные из параметров слота -->
-    <!-- Не обязательно явно передавать месяц и день, можно передать данные в любом удобном виде -->
-    <div v-for="holiday in russianHolidaysMap[0][1]" :key="holiday" class="holiday">
-      {{ holiday }}
-    </div>
+    <template #cell="{ date, month }">
+      <div v-for="holiday in russianHolidaysMap[month][date]" :key="holiday" class="holiday">
+        {{ holiday }}
+      </div>
+    </template>
   </calendar-view>
 </template>
 

@@ -1,16 +1,71 @@
 <template>
-  <div class="input-group input-group_icon input-group_icon-left input-group_icon-right">
-    <img class="icon" />
-
-    <input ref="" class="form-control form-control_rounded form-control_sm" />
-
-    <img class="icon" />
+  <div
+    class="input-group"
+    :class="{
+      'input-group_icon': Boolean($slots['left-icon']) || Boolean($slots['right-icon']),
+      'input-group_icon-left': Boolean($slots['left-icon']),
+      'input-group_icon-right': Boolean($slots['right-icon']),
+    }"
+  >
+    <slot name="left-icon" />
+    <component
+      :is="multiline ? 'textarea' : 'input'"
+      ref="input"
+      class="form-control"
+      :class="{
+        'form-control_rounded': rounded,
+        'form-control_sm': small,
+      }"
+      v-bind="$attrs"
+      :value.prop="value"
+      v-on="listeners"
+    />
+    <slot name="right-icon" />
   </div>
 </template>
 
 <script>
 export default {
   name: 'AppInput',
+  inheritAttrs: false,
+
+  model: {
+    prop: 'value',
+    event: 'input',
+  },
+
+  props: {
+    value: {},
+    rounded: {
+      type: Boolean,
+      default: false,
+    },
+
+    small: {
+      type: Boolean,
+      default: false,
+    },
+
+    multiline: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  computed: {
+    listeners() {
+      return {
+        ...this.$listeners,
+        input: ($event) => {
+          this.$emit('input', $event.target.value);
+        },
+
+        change: ($event) => {
+          this.$emit('change', $event.target.value);
+        },
+      };
+    },
+  },
 };
 </script>
 
